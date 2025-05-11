@@ -3,6 +3,8 @@ let container = document.querySelector(".container");
 let h1Tag = document.createElement("h1");
 h1Tag.innerText = "Random Password Generator";
 
+let strengthTag=document.querySelector(".strength");
+
 let inputContainer = document.createElement("div");
 inputContainer.classList.add("inputContainer");
 
@@ -17,36 +19,50 @@ copyBtn.classList.add("copyBtn");
 copyBtn.innerText = "copy";
 inputContainer.append(inputTag, copyBtn);
 
+let strengthContainer = document.createElement("div");
+strengthContainer.classList.add("strengthContainer");
+strengthContainer.append(inputContainer,strengthTag);
+
 let btnTag = document.createElement("button");
 btnTag.classList.add("btnTag");
-btnTag.innerText = "Generate"
+btnTag.innerText = "Generate";
 
-container.append(h1Tag, inputContainer, btnTag);
+container.append(h1Tag,strengthContainer,btnTag);
 
 btnTag.addEventListener("click", () => {
     createPassword();
 })
 
+let alertMsg=document.createElement("p");
+alertMsg.classList.add("alertMsg");
+document.body.append(alertMsg);
+
 copyBtn.addEventListener("click", () => {
     copyPassword();
     if (inputTag.value) {
-        copyBtn.innerText = "copied!";
-        copyBtn.style.backgroundColor = ("green");
-        copyBtn.style.color = ("white");
+        alertMsg.innerText = inputTag.value +" Copied!";
+        alertMsg.style.display="block";
         setTimeout(() => {
-        copyBtn.innerText = "copy";
-        copyBtn.style.backgroundColor = ("white");
-        copyBtn.style.color = ("black");
-            
-        },2000);
-        
+        alertMsg.style.display="none";
+        },2000); 
     }
 })
 
-
 function createPassword() {
-    const chars = "0123456789abcdefghijklmnopqrstuvwxtz!@#$%^&*()_+?:{}[]ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    const passwordLength = 14;
+    const strengthValue=document.getElementById("strength").value;
+    let passwordLength,chars;
+    if(strengthValue==="easy"){
+        passwordLength=6;
+        chars="abcdefghijklmnopqrstuvwxyz";
+    }else if(strengthValue==="medium"){
+        passwordLength=10;
+        chars="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    }
+    else if(strengthValue==="strong"){
+    passwordLength = 14;
+    chars = "0123456789abcdefghijklmnopqrstuvwxtz!@#$%^&*()_+?:{}[]ABCDEFGHIJKLMNOPQRSTUVWXYZ";  
+    }
+
     let password = "";
     for (let i = 0; i < passwordLength; i++) {
         const randomNum = Math.floor(Math.random() * chars.length);
